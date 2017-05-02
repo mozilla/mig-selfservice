@@ -1,0 +1,153 @@
+{
+    "name": "test action to demonstrate the syntax",
+    "description": {
+        "author": "Julien Vehent",
+        "email": "jvehent@mozilla.com",
+        "url": "https://example.net/url_to_something#useful",
+        "revision": 201409021000
+    },
+    "target": "queueloc LIKE 'linux.%' AND environment->>'ident' ILIKE '%ubuntu%'",
+    "threat": {
+        "level": "alert",
+        "type": "system",
+        "family": "malware"
+    },
+    "operations": [
+        {
+            "module": "file",
+            "parameters": {
+                "searches": {
+                    "s1": {
+                        "md5": [
+                            "6a7f0de60c4f43522882f2fb8a69209a"
+                        ],
+                        "names": [
+                            "fusermount"
+                        ],
+                        "options": {
+                            "matchall": true,
+                            "maxdepth": 2
+                        },
+                        "paths": [
+                            "/usr"
+                        ]
+                    },
+                    "s2": {
+                        "contents": [
+                            "gpgcheck=1"
+                        ],
+                        "names": [
+                            "yum.conf"
+                        ],
+                        "options": {
+                            "matchall": true,
+                            "maxdepth": 1
+                        },
+                        "paths": [
+                            "/etc/"
+                        ]
+                    },
+                    "s3": {
+                        "contents": [
+                            "RedHat"
+                        ],
+                        "names": [
+                            "Concertation",
+                            "cariboumaurice12345"
+                        ],
+                        "options": {
+                            "maxdepth": 1
+                        },
+                        "paths": [
+                            "/home/ulfr"
+                        ]
+                    },
+                    "s4": {
+                        "paths": [
+                            "/nowhere"
+                        ],
+                        "names": [
+                            "nofilenamenotfound"
+                        ],
+                        "options": {
+                            "matchall": true
+                        }
+                    },
+                    "s5": {
+                        "names": [
+                            "known_hosts"
+                        ],
+                        "options": {
+                            "maxdepth": 2
+                        },
+                        "paths": [
+                            "/home/ulfr"
+                        ]
+                    },
+                    "s6": {
+                        "mtimes": [
+                            "<90d"
+                        ],
+                        "options": {
+                            "matchall": true,
+                            "maxdepth": 2
+                        },
+                        "paths": [
+                            "/home/ulfr"
+                        ],
+                        "sizes": [
+                            ">1g"
+                        ]
+                    },
+                    "s7": {
+                        "modes": [
+                            "gt"
+                        ],
+                        "names": [
+                            "somefile"
+                        ],
+                        "options": {
+                            "matchall": true,
+                            "maxdepth": 1
+                        },
+                        "paths": [
+                            "/home/ulfr"
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "module": "netstat",
+            "parameters": {
+                "connectedip": [
+                    "173.194.0.0/16"
+                ],
+                "listeningport": [
+                    "631"
+                ],
+                "localip": [
+                    "172.21.0.0/24"
+                ],
+                "localmac": [
+                    "^8c:70:"
+                ],
+                "neighborip": [
+                    "172.21.0.6"
+                ],
+                "neighbormac": [
+                    "30:05:5c:00:80:3a"
+                ]
+            }
+        },
+        {
+            "module": "agentdestroy",
+            "parameters": {
+                "pid": 12345,
+                "version": "b9536d2-201403031435"
+            }
+        }
+
+    ],
+    "syntaxversion": 2
+}

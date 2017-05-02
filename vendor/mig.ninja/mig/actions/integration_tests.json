@@ -1,0 +1,144 @@
+{
+    "name": "Integration tests",
+    "description": {
+        "author": "Julien Vehent",
+        "email": "ulfr@mozilla.com",
+        "revision": 201409031000
+    },
+    "target": "environment->>'os'='linux'",
+    "threat": {
+        "level": "-",
+        "family": "test"
+    },
+    "operations": [
+        {
+            "module": "file",
+            "parameters": {
+                "searches": {
+                    "sshnotmatch": {
+                        "paths": [
+                            "/home"
+                        ],
+                        "names": [
+                            "^authorized_keys$"
+                        ],
+                        "contents": [
+                            "should not match"
+                        ],
+                        "options": {
+                            "matchall": true,
+                            "matchlimit": 10,
+                            "maxdepth": 4,
+                            "maxerrors": 10
+                        }
+                    },
+                    "yumshouldmatch": {
+                        "paths": [
+                            "/etc/yum.repos.d"
+                        ],
+                        "names": [
+                            ".+\\.repo"
+                        ],
+                        "contents": [
+                            "^gpgcheck=1$"
+                        ],
+                        "options": {
+                            "matchall": true,
+                            "matchlimit": 10,
+                            "maxdepth": 4,
+                            "maxerrors": 10
+                        }
+                    },
+                    "etcshouldmatch": {
+                        "paths": [
+                            "/etc/passwd"
+                        ],
+                        "contents": [
+                            "^jvehent:"
+                        ],
+                        "options": {
+                            "matchall": true,
+                            "matchlimit": 10,
+                            "maxdepth": 4,
+                            "maxerrors": 10
+                        }
+                    },
+                    "shadownotmatch": {
+                        "paths": [
+                            "/etc/shadow"
+                        ],
+                        "contents": [
+                            "^shouldnotmatch$"
+                        ],
+                        "names": [
+                            "^bob$"
+                        ],
+                        "options": {
+                            "matchall": true,
+                            "matchlimit": 10,
+                            "maxdepth": 4,
+                            "maxerrors": 10
+                        }
+                    },
+                    "shadowmatch": {
+                        "paths": [
+                            "/etc"
+                        ],
+                        "contents": [
+                            "^root:"
+                        ],
+                        "names": [
+                            "^shadow$"
+                        ],
+                        "options": {
+                            "matchall": true,
+                            "matchlimit": 10,
+                            "maxdepth": 4,
+                            "maxerrors": 10
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "module": "netstat",
+            "parameters": {
+                "connectedip": [
+                    "0.0.0.0/0"
+                ],
+                "listeningport": [
+                    "22"
+                ],
+                "localip": [
+                    "0.0.0.0/0"
+                ],
+                "localmac": [
+                    "^[0-9a-f]"
+                ],
+                "neighborip": [
+                    "0.0.0.0/0"
+                ],
+                "neighbormac": [
+                    "^[0-9a-f]"
+                ]
+            }
+        },
+        {
+          "module": "ping",
+          "parameters": {
+            "count": 5,
+            "destination": "google.com",
+            "destinationport": 80,
+            "protocol": "tcp",
+            "timeout": 5
+          }
+        },
+        {
+          "module": "timedrift",
+          "parameters": {
+            "drift": "60s"
+          }
+        }
+    ],
+    "syntaxversion": 2
+}

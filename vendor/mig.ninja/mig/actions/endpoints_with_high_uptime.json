@@ -1,0 +1,32 @@
+{
+    "name": "Find endpoints with uptime > 1.5 years",
+    "description": {
+        "author": "Julien Vehent",
+        "email": "ulfr@mozilla.com",
+        "revision": 201409031000
+    },
+    "target": "queueloc like 'linux.%'",
+    "threat": {
+        "level": "-",
+        "type": "system",
+        "family": "search"
+    },
+    "operations": [
+        {
+            "module": "file",
+            "parameters": {
+                "searches": {
+                    "uptimesearch": {
+                        "paths": [
+                            "/proc/uptime"
+                        ],
+                        "regexes": [
+                            "^[5-9]{1}[0-9]{7,}\\."
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "syntaxversion": 2
+}

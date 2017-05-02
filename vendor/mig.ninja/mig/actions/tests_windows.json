@@ -1,0 +1,38 @@
+{
+    "name": "Some tests for windows",
+    "description": {
+        "author": "Julien Vehent",
+        "email": "ulfr@mozilla.com",
+        "revision": 201409031800
+    },
+    "target": "agents.environment->>'os' = 'windows'",
+    "threat": {
+        "level": "-",
+        "family": "test"
+    },
+    "operations": [
+        {
+            "module": "file",
+            "parameters": {
+                "etchosts": {
+                    "paths": [
+                        "C:\\Windows\\System32\\drivers\\etc\\hosts"
+                    ],
+                    "regexes": [
+                        "localhost",
+                        "127.0.0.1"
+                    ]
+                },
+                "systemsearch": {
+                    "paths": [
+                        "C:\\Windows\\System32\\"
+                    ],
+                    "md5": [
+                        "c6e35b4cdad5ee02f14215facc710c85"
+                    ]
+                }
+            }
+        }
+    ],
+    "syntaxversion": 2
+}
