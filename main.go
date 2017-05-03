@@ -131,10 +131,12 @@ func handleMain(rw http.ResponseWriter, req *http.Request) {
 	rdetails, err := newRequestDetails(req)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	mp, err := renderMainPage(rdetails)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	fmt.Fprint(rw, mp)
 }
@@ -143,14 +145,17 @@ func handleKeyStatus(rw http.ResponseWriter, req *http.Request) {
 	rdetails, err := newRequestDetails(req)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	cli, err := newMIGClient()
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	err = rdetails.addKeys(cli)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	resp := loadersReply{}
 	resp.Loaders = rdetails.loaders
@@ -160,6 +165,7 @@ func handleKeyStatus(rw http.ResponseWriter, req *http.Request) {
 	buf, err := json.Marshal(&resp)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	rw.Header().Set("Content-Type", "application/json")
 	fmt.Fprint(rw, string(buf))
@@ -174,6 +180,7 @@ func handleNewKey(rw http.ResponseWriter, req *http.Request) {
 	rdetails, err := newRequestDetails(req)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 
 	decoder := json.NewDecoder(req.Body)
@@ -181,11 +188,13 @@ func handleNewKey(rw http.ResponseWriter, req *http.Request) {
 	err = decoder.Decode(&newkey)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 
 	cli, err := newMIGClient()
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	// Add any existing loader entries for this user to rdetails
 	err = rdetails.addKeys(cli)
@@ -193,6 +202,7 @@ func handleNewKey(rw http.ResponseWriter, req *http.Request) {
 	le.Name, err = rdetails.convertSlotID(newkey.SlotID)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	le.ExpectEnv = cfg.ExpectEnv
 
@@ -223,16 +233,19 @@ func handleNewKey(rw http.ResponseWriter, req *http.Request) {
 		newle, err = cli.PostNewLoader(le)
 		if err != nil {
 			http.Error(rw, err.Error(), 500)
+			return
 		}
 		// Also enable the new loader entry
 		err = cli.LoaderEntryStatus(newle, true)
 		if err != nil {
 			http.Error(rw, err.Error(), 500)
+			return
 		}
 	}
 	buf, err := json.Marshal(&newle)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	rw.Header().Set("Content-Type", "application/json")
 	fmt.Fprint(rw, string(buf))
@@ -247,24 +260,29 @@ func handleDelKey(rw http.ResponseWriter, req *http.Request) {
 	rdetails, err := newRequestDetails(req)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	decoder := json.NewDecoder(req.Body)
 	defer req.Body.Close()
 	err = decoder.Decode(&newkey)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	cli, err := newMIGClient()
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	err = rdetails.addKeys(cli)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	le.Name, err = rdetails.convertSlotID(newkey.SlotID)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 	// We need the loader ID to change the status of the entry, locate the ID
 	// in rdetails based on our loader name and add it to the request
@@ -278,10 +296,12 @@ func handleDelKey(rw http.ResponseWriter, req *http.Request) {
 	}
 	if !found {
 		http.Error(rw, "unable to locate loader ID for slot", 500)
+		return
 	}
 	err = cli.LoaderEntryStatus(le, false)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
+		return
 	}
 }
 
@@ -305,7 +325,12 @@ func newMIGClient() (ret client.Client, err error) {
 
 func setContext(h func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		context.Set(r, remoteUser, "ameihm@mozilla.com")
+		ru := r.Header.Get("REMOTE_USER")
+		if ru == "" {
+			http.Error(w, "invalid header configuration", 500)
+			return
+		}
+		context.Set(r, remoteUser, ru)
 		h(w, r)
 	}
 }
