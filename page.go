@@ -24,7 +24,7 @@ var mainTmpl = `<html>
   <table>
     <thead>
       <tr>
-      <td>Device slot</td><td>Assigned key<td><td>Action</td><td>In use?</td>
+      <td>Device slot</td><td>Assigned key<td><td>Action</td><td>Key last used</td>
       </tr>
     </thead>
     <tbody>

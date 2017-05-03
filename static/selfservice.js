@@ -13,7 +13,6 @@ function keyParser(data) {
 		var found = false;
 		for (var j = 0; j < data.loaders.length; j++) {
 			ldr = data.loaders[j];
-			console.log(ldr);
 			if (ldr["enabled"] == false) {
 				continue;
 			}
@@ -21,9 +20,20 @@ function keyParser(data) {
 			slotval = ldr["name"].slice(ri + 1);
 			if (parseInt(slotval) == i) {
 				var slotid = "slot" + i;
+				var ldate = new Date(ldr["lastseen"]);
+				var n = new Date();
+				var timeDiff = Math.abs(n.getTime() - ldate.getTime());
+				var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) - 1;
 				t = $("#" + slotid).find("td");
 				t.eq(1).html("Assigned");
 				t.eq(2).html("<a id=\"" + slotid + "\" href=\"#\">Remove</a>").on("click.rem", removeFunc(slotid));
+				if (diffDays == 0) {
+					t.eq(3).html("Today");
+				} else if (diffDays == 1) {
+					t.eq(3).html("Yesterday");
+				} else {
+					t.eq(3).html(diffDays + " days ago");
+				}
 				found = true;
 				break;
 			}
@@ -35,6 +45,7 @@ function keyParser(data) {
 		t = $("#" + slotid).find("td");
 		t.eq(1).html("Not set");
 		t.eq(2).html("<a id=\"" + slotid + "\" href=\"#\">Generate key</a>").on("click.gen", generateFunc(slotid));
+		t.eq(3).html("N/A");
 	}
 }
 
@@ -76,6 +87,7 @@ function showInitialKey(data, textstat, xhr) {
 	t = $("#" + slotid).find("td");
 	t.eq(1).html(keyval);
 	t.eq(2).html("Created");
+	t.eq(3).html("Created");
 }
 
 function loadKeys() {
