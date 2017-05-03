@@ -251,7 +251,6 @@ func handleDelKey(rw http.ResponseWriter, req *http.Request) {
 	decoder := json.NewDecoder(req.Body)
 	defer req.Body.Close()
 	err = decoder.Decode(&newkey)
-	fmt.Printf("%+v\n", newkey)
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
 	}
@@ -284,8 +283,6 @@ func handleDelKey(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		http.Error(rw, err.Error(), 500)
 	}
-	fmt.Printf("%+v\n", le)
-	fmt.Println("REMOVE")
 }
 
 func handlePing(rw http.ResponseWriter, req *http.Request) {
