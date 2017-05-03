@@ -24,13 +24,13 @@ var mainTmpl = `<html>
   <table>
     <thead>
       <tr>
-      <td>Device slot</td><td>Assigned key<td><td>Action</td>
+      <td>Device slot</td><td>Assigned key<td><td>Action</td><td>In use?</td>
       </tr>
     </thead>
     <tbody>
-      <tr id="slot1"><td>1</td><td>Loading</td><td>Loading</td></tr>
-      <tr id="slot2"><td>2</td><td>Loading</td><td>Loading</td></tr>
-      <tr id="slot3"><td>3</td><td>Loading</td><td>Loading</td></tr>
+      <tr id="slot1"><td>1</td><td>Loading</td><td>Loading</td><td>Loading</td></tr>
+      <tr id="slot2"><td>2</td><td>Loading</td><td>Loading</td><td>Loading</td></tr>
+      <tr id="slot3"><td>3</td><td>Loading</td><td>Loading</td><td>Loading</td></tr>
     </tbody>
   </table>
 </div>

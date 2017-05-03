@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/go-yaml/yaml"
@@ -27,6 +28,7 @@ type config struct {
 	APIUrl         string
 	APIKey         string
 	SkipVerifyCert bool
+	ExpectEnv      string
 }
 
 var cfg config
@@ -35,8 +37,18 @@ type remoteUserType int
 
 const remoteUser remoteUserType = 0
 
+// Response to a key status request
 type loadersReply struct {
 	Loaders []mig.LoaderEntry `json:"loaders"`
+}
+
+// Payload submitted for a new key request
+type newkeyRequest struct {
+	SlotID string `json:"slot"`
+}
+
+func (n *newkeyRequest) validate() error {
+	return nil
 }
 
 type requestDetails struct {
@@ -46,6 +58,20 @@ type requestDetails struct {
 
 func (r *requestDetails) searchUserString() string {
 	return "migss-" + r.remoteUser + "-%"
+}
+
+func (r *requestDetails) convertSlotID(slotid string) (string, error) {
+	ret := "migss-" + r.remoteUser + "-"
+	sv := strings.Replace(slotid, "slot", "", 1)
+	svint, err := strconv.ParseInt(sv, 10, 64)
+	if err != nil {
+		return "", err
+	}
+	if (svint < 1) || (svint > 3) {
+		return "", fmt.Errorf("invalid slot id")
+	}
+	ret = ret + sv
+	return ret, nil
 }
 
 func (r *requestDetails) addKeys(cli client.Client) error {
@@ -139,6 +165,129 @@ func handleKeyStatus(rw http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(rw, string(buf))
 }
 
+func handleNewKey(rw http.ResponseWriter, req *http.Request) {
+	var (
+		newkey newkeyRequest
+		le     mig.LoaderEntry
+	)
+
+	rdetails, err := newRequestDetails(req)
+	if err != nil {
+		http.Error(rw, err.Error(), 500)
+	}
+
+	decoder := json.NewDecoder(req.Body)
+	defer req.Body.Close()
+	err = decoder.Decode(&newkey)
+	if err != nil {
+		http.Error(rw, err.Error(), 500)
+	}
+
+	cli, err := newMIGClient()
+	if err != nil {
+		http.Error(rw, err.Error(), 500)
+	}
+	// Add any existing loader entries for this user to rdetails
+	err = rdetails.addKeys(cli)
+
+	le.Name, err = rdetails.convertSlotID(newkey.SlotID)
+	if err != nil {
+		http.Error(rw, err.Error(), 500)
+	}
+	le.ExpectEnv = cfg.ExpectEnv
+
+	// At this point the loader is ready to be created, but first check and see if an
+	// entry for this slot already exists. If so we will enable and rekey this entry
+	// rather than create it.
+	var newle mig.LoaderEntry
+	found := false
+	for _, x := range rdetails.loaders {
+		if x.Name == le.Name {
+			newle = x
+			found = true
+			break
+		}
+	}
+	if found {
+		err = cli.LoaderEntryStatus(newle, true)
+		if err != nil {
+			http.Error(rw, err.Error(), 500)
+			return
+		}
+		newle, err = cli.LoaderEntryKey(newle)
+		if err != nil {
+			http.Error(rw, err.Error(), 500)
+			return
+		}
+	} else {
+		newle, err = cli.PostNewLoader(le)
+		if err != nil {
+			http.Error(rw, err.Error(), 500)
+		}
+		// Also enable the new loader entry
+		err = cli.LoaderEntryStatus(newle, true)
+		if err != nil {
+			http.Error(rw, err.Error(), 500)
+		}
+	}
+	buf, err := json.Marshal(&newle)
+	if err != nil {
+		http.Error(rw, err.Error(), 500)
+	}
+	rw.Header().Set("Content-Type", "application/json")
+	fmt.Fprint(rw, string(buf))
+}
+
+func handleDelKey(rw http.ResponseWriter, req *http.Request) {
+	var (
+		newkey newkeyRequest
+		le     mig.LoaderEntry
+	)
+
+	rdetails, err := newRequestDetails(req)
+	if err != nil {
+		http.Error(rw, err.Error(), 500)
+	}
+	decoder := json.NewDecoder(req.Body)
+	defer req.Body.Close()
+	err = decoder.Decode(&newkey)
+	fmt.Printf("%+v\n", newkey)
+	if err != nil {
+		http.Error(rw, err.Error(), 500)
+	}
+	cli, err := newMIGClient()
+	if err != nil {
+		http.Error(rw, err.Error(), 500)
+	}
+	err = rdetails.addKeys(cli)
+	if err != nil {
+		http.Error(rw, err.Error(), 500)
+	}
+	le.Name, err = rdetails.convertSlotID(newkey.SlotID)
+	if err != nil {
+		http.Error(rw, err.Error(), 500)
+	}
+	// We need the loader ID to change the status of the entry, locate the ID
+	// in rdetails based on our loader name and add it to the request
+	found := false
+	for _, x := range rdetails.loaders {
+		if x.Name == le.Name {
+			le.ID = x.ID
+			found = true
+			break
+		}
+	}
+	if !found {
+		http.Error(rw, "unable to locate loader ID for slot", 500)
+	}
+	err = cli.LoaderEntryStatus(le, false)
+	if err != nil {
+		http.Error(rw, err.Error(), 500)
+	}
+	fmt.Printf("%+v\n", le)
+	fmt.Println("REMOVE")
+}
+
 func handlePing(rw http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(rw, "pong\n")
 }
@@ -187,6 +336,8 @@ func main() {
 	r.HandleFunc("/ping", handlePing).Methods("GET")
 	r.HandleFunc("/", setContext(handleMain)).Methods("GET")
 	r.HandleFunc("/keystatus", setContext(handleKeyStatus)).Methods("GET")
+	r.HandleFunc("/newkey", setContext(handleNewKey)).Methods("POST")
+	r.HandleFunc("/delkey", setContext(handleDelKey)).Methods("POST")
 
 	sp := http.StripPrefix("/static/", http.FileServer(http.Dir("./static/")))
 	r.PathPrefix("/static").Handler(sp)
