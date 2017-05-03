@@ -15,16 +15,31 @@ var mainTmpl = `<html>
 <head>
 <script src="static/jquery-3.2.1.min.js" type="text/javascript"></script>
 <script src="static/selfservice.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="static/selfservice.css">
 </head>
 <body>
 <div>
-  <p>Welcome, {{.RemoteUser}}.</p>
+<img src="static/mig-logo-transparent.png" width="25%">
+</div>
+<div>
+<h1>MIG self-service portal</h1>
+</div>
+<div>
+  <p>Welcome, <i>{{.RemoteUser}}.</i></p>
+  <p>This is the self-service portal for <a href="http://mig.mozilla.org">Mozilla
+  Investigator</a>. Here you can download MIG for your workstation devices, and create
+  your own keys to allow you to install the agent. You can create up to 3 keys to use
+  on end-point devices that support MIG.</p>
+  <p>Mozilla Infosec uses the MIG agent to rapidly respond to incidents and help
+  identify security issues that may have occurred within the organization.</p>
+  <p>After generating a key in a key slot, be sure to note the key as it will only be
+  displayed upon initial creation.</p>
 </div>
 <div>
   <table>
     <thead>
       <tr>
-      <td>Device slot</td><td>Assigned key<td><td>Action</td><td>Key last used</td>
+      <td>Device slot</td><td>Assigned key</td><td>Action</td><td>Key last used</td>
       </tr>
     </thead>
     <tbody>

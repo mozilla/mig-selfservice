@@ -1,0 +1,39 @@
+body {
+	background-color: #f8f8ff;
+}
+
+h1 {
+	font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+	font-size: 24px;
+}
+
+p {
+	font-family: "Open Sans",sans-serif;
+	max-width: 80%;
+}
+
+table, th, td {
+	text-align: left;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	color: #505050;
+	font-size: 14px;
+}
+
+table tr td:nth-child(2) {
+	min-width: 400px;
+}
+
+thead td {
+	color: black;
+	font-weight: bold;
+	border-bottom: 1px;
+	border-bottom-style: solid;
+}
+
+th, td {
+	padding-right: 20px;
+}
+
+a:visited, a:link {
+	color: blue;
+}
