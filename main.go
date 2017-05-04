@@ -25,10 +25,15 @@ import (
 )
 
 type config struct {
-	APIUrl         string
-	APIKey         string
-	SkipVerifyCert bool
-	ExpectEnv      string
+	APIUrl           string
+	APIKey           string
+	SkipVerifyCert   bool
+	ExpectEnv        string
+	DownloadWin      string
+	DownloadLinuxRPM string
+	DownloadLinuxDEB string
+	DownloadOSX      string
+	FakeRemote       string
 }
 
 var cfg config
@@ -325,10 +330,15 @@ func newMIGClient() (ret client.Client, err error) {
 
 func setContext(h func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ru := r.Header.Get("REMOTE_USER")
-		if ru == "" {
-			http.Error(w, "invalid header configuration", 500)
-			return
+		var ru string
+		if cfg.FakeRemote != "" {
+			ru = cfg.FakeRemote
+		} else {
+			ru = r.Header.Get("REMOTE_USER")
+			if ru == "" {
+				http.Error(w, "invalid header configuration", 500)
+				return
+			}
 		}
 		context.Set(r, remoteUser, ru)
 		h(w, r)
@@ -337,11 +347,13 @@ func setContext(h func(http.ResponseWriter, *http.Request)) func(http.ResponseWr
 
 func main() {
 	var (
-		err      error
-		confpath string
+		err        error
+		confpath   string
+		fakeremote string
 	)
 
-	flag.StringVar(&confpath, "confpath", "./mig-selfservice.yml", "path to configuration file")
+	flag.StringVar(&confpath, "c", "./mig-selfservice.yml", "path to configuration file")
+	flag.StringVar(&fakeremote, "r", "", "fake remote user for testing")
 	flag.Parse()
 	cfgbuf, err := ioutil.ReadFile(confpath)
 	if err != nil {
@@ -352,6 +364,9 @@ func main() {
 	if err != nil {
 		fmt.Printf("error: %v\n", err)
 		os.Exit(1)
+	}
+	if fakeremote != "" {
+		cfg.FakeRemote = fakeremote
 	}
 
 	r := mux.NewRouter()
