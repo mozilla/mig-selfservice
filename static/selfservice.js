@@ -99,6 +99,15 @@ function loadKeys() {
 	$.ajax({url: "/keystatus", success: keyParser});
 }
 
+function osDetails() {
+	$(".osdet").hide();
+	$("#osselect").change(function() {
+		$(".osdet").hide();
+		$("#" + $(this).val()).show();
+	});
+}
+
 $(document).ready(function() {
+	osDetails();
 	loadKeys();
 });

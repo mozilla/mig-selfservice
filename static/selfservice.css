@@ -7,9 +7,20 @@ h1 {
 	font-size: 24px;
 }
 
-p {
+h2 {
+	font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+	font-size: 16px;
+}
+
+p, li {
 	font-family: "Open Sans",sans-serif;
+}
+
+div.intro, div.osdet {
+	background-color: #e0e0e0;
+	border-radius: 25px;
 	max-width: 80%;
+	padding: 4px;
 }
 
 table, th, td {
