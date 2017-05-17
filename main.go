@@ -334,6 +334,11 @@ func setContext(h func(http.ResponseWriter, *http.Request)) func(http.ResponseWr
 		if cfg.FakeRemote != "" {
 			ru = cfg.FakeRemote
 		} else {
+			hslice, ok := r.Header["REMOTE_USER"]
+			if !ok || len(hslice) != 1 {
+				http.Error(w, "invalid header configuration", 500)
+				return
+			}
 			ru = r.Header.Get("REMOTE_USER")
 			if ru == "" {
 				http.Error(w, "invalid header configuration", 500)
