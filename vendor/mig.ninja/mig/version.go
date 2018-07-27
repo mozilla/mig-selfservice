@@ -4,6 +4,6 @@
 //
 // Contributor: Julien Vehent jvehent@mozilla.com [:ulfr]
 
-package mig /* import "mig.ninja/mig" */
+package mig /* import "github.com/mozilla/mig" */
 
 var Version string = "20160429-0.51f628c"

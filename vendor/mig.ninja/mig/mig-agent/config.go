@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"mig.ninja/mig"
+	"github.com/mozilla/mig"
 
 	"gopkg.in/gcfg.v1"
 )

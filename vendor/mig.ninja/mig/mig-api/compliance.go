@@ -8,9 +8,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"mig.ninja/mig"
-	"mig.ninja/mig/modules"
-	"mig.ninja/mig/modules/file"
+	"github.com/mozilla/mig"
+	"github.com/mozilla/mig/modules"
+	"github.com/mozilla/mig/modules/file"
 	"time"
 )
 

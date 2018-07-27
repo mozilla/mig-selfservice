@@ -4,7 +4,7 @@
 //
 // Contributor: Julien Vehent jvehent@mozilla.com [:ulfr]
 
-package client /* import "mig.ninja/mig/client" */
+package client /* import "github.com/mozilla/mig/client" */
 
 import (
 	"encoding/json"

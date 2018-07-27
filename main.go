@@ -19,9 +19,9 @@ import (
 	"github.com/go-yaml/yaml"
 	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
-	"mig.ninja/mig"
-	"mig.ninja/mig/client"
-	migdbsearch "mig.ninja/mig/database/search"
+	"github.com/mozilla/mig"
+	"github.com/mozilla/mig/client"
+	migdbsearch "github.com/mozilla/mig/database/search"
 )
 
 type config struct {

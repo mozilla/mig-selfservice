@@ -11,8 +11,8 @@ import (
 	"os"
 
 	"gopkg.in/gcfg.v1"
-	"mig.ninja/mig"
-	"mig.ninja/mig/workers"
+	"github.com/mozilla/mig"
+	"github.com/mozilla/mig/workers"
 )
 
 const workerName = "agent_verif"

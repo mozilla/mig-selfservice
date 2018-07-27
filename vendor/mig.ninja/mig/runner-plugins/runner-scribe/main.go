@@ -22,8 +22,8 @@ import (
 
 	"github.com/jvehent/gozdef"
 	"gopkg.in/gcfg.v1"
-	"mig.ninja/mig"
-	scribemod "mig.ninja/mig/modules/scribe"
+	"github.com/mozilla/mig"
+	scribemod "github.com/mozilla/mig/modules/scribe"
 )
 
 // Configuration structure for runner-scribe

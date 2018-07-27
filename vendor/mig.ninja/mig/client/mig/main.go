@@ -14,9 +14,9 @@ import (
 	"os/signal"
 	"time"
 
-	"mig.ninja/mig"
-	"mig.ninja/mig/client"
-	"mig.ninja/mig/modules"
+	"github.com/mozilla/mig"
+	"github.com/mozilla/mig/client"
+	"github.com/mozilla/mig/modules"
 )
 
 func usage() {

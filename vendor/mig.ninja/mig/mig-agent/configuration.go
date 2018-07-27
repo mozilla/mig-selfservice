@@ -6,7 +6,7 @@
 package main
 
 import (
-	"mig.ninja/mig"
+	"github.com/mozilla/mig"
 	"time"
 )
 

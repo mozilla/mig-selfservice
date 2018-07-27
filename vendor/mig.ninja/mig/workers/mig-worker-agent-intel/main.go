@@ -15,8 +15,8 @@ import (
 
 	"github.com/jvehent/gozdef"
 	"gopkg.in/gcfg.v1"
-	"mig.ninja/mig"
-	"mig.ninja/mig/workers"
+	"github.com/mozilla/mig"
+	"github.com/mozilla/mig/workers"
 )
 
 const workerName = "agent_intel"

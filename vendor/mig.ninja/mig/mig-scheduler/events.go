@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/streadway/amqp"
-	"mig.ninja/mig"
+	"github.com/mozilla/mig"
 )
 
 // sendEvent publishes a message to the miginternal rabbitmq exchange

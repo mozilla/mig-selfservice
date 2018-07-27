@@ -8,8 +8,8 @@ package main
 
 import (
 	"fmt"
-	"mig.ninja/mig"
-	"mig.ninja/mig/service"
+	"github.com/mozilla/mig"
+	"github.com/mozilla/mig/service"
 	"runtime"
 )
 

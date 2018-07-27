@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 // Contributor: Julien Vehent jvehent@mozilla.com [:ulfr]
-package workers /* import "mig.ninja/mig/workers" */
+package workers /* import "github.com/mozilla/mig/workers" */
 
 import (
 	"crypto/rand"
@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"github.com/streadway/amqp"
 	"io/ioutil"
-	"mig.ninja/mig"
+	"github.com/mozilla/mig"
 	"net"
 	"time"
 )

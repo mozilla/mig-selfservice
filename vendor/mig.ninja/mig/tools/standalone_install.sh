@@ -312,7 +312,7 @@ echo -e "\n---- Creating agent configuration\n"
 cat > conf/mig-agent-conf.go << EOF
 package main
 import(
-    "mig.ninja/mig"
+    "github.com/mozilla/mig"
     "time"
 )
 var TAGS = struct {
