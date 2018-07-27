@@ -55,9 +55,9 @@ Then retrieve MIG's source code using go get:
 
 .. code:: bash
 
-    $ go get mig.ninja/mig
+    $ go get github.com/mozilla/mig
 
-Go get will place MIG under `$GOPATH/src/mig.ninja/mig`. Change directory to
+Go get will place MIG under `$GOPATH/src/github.com/mozilla/mig`. Change directory to
 this path and build the components. Note that, if you're on a Debian or Ubuntu
 box, you can run `make deb-server` directly which will build the scheduler, api
 and workers into a single DEB package. Otherwise, use the following make
@@ -185,7 +185,7 @@ AMQP clients to validate the rabbitmq certificate correctly.
 
 	$ mkdir migca
 	$ cd migca
-	$ cp $GOPATH/src/mig.ninja/mig/tools/create_mig_ca.sh .
+	$ cp $GOPATH/src/github.com/mozilla/mig/tools/create_mig_ca.sh .
 	$ bash create_mig_ca.sh
 	[...]
 	enter the public dns name of the rabbitmq server agents will connect to> mymigrelay.example.net
@@ -685,7 +685,7 @@ its source repository
 .. code::
 
 	$ sudo apt-get install libreadline-dev
-	$ go get mig.ninja/mig/client/mig-console
+	$ go get github.com/mozilla/mig/client/mig-console
 	$ $GOPATH/bin/mig-console
 
 	## ##                                     _.---._     .---.
@@ -834,8 +834,8 @@ format.
 
 .. code:: bash
 
-	$ go get mig.ninja/mig
-	$ cd $GOPATH/src/mig.ninja/mig
+	$ go get github.com/mozilla/mig
+	$ cd $GOPATH/src/github.com/mozilla/mig
 	$ cp conf/mig-agent-conf.go.inc example.net.agents-conf.go
 	$ vim conf/example.net.agents-conf.go
 
@@ -1085,7 +1085,7 @@ for, it is set to `dev` by default.
 	# test if the agent configuration variable contains something different than the default value
 	# and if so, replace the link to the default configuration with the provided configuration
 	if [ conf/linuxwall-mig-agent-conf.go != "conf/mig-agent-conf.go.inc" ]; then rm mig-agent/configuration.go; cp conf/linuxwall-mig-agent-conf.go mig-agent/configuration.go; fi
-	GOOS=linux GOARCH=amd64 GO15VENDOREXPERIMENT=1 go build  -o bin/linux/amd64/mig-agent-20150909+556e9c0.dev"" -ldflags "-X main.version=20150909+556e9c0.dev" mig.ninja/mig/mig-agent
+	GOOS=linux GOARCH=amd64 GO15VENDOREXPERIMENT=1 go build  -o bin/linux/amd64/mig-agent-20150909+556e9c0.dev"" -ldflags "-X main.version=20150909+556e9c0.dev" github.com/mozilla/mig/mig-agent
 	ln -fs "$(pwd)/bin/linux/amd64/mig-agent-20150909+556e9c0.dev""" "$(pwd)/bin/linux/amd64/mig-agent-latest"
 	[ -x "bin/linux/amd64/mig-agent-20150909+556e9c0.dev""" ] && echo SUCCESS && exit 0
 	SUCCESS
@@ -1169,7 +1169,7 @@ investigation that looks for a user in `/etc/passwd`.
 
 .. code:: bash
 
-	$ go get mig.ninja/mig/client/mig
+	$ go get github.com/mozilla/mig/client/mig
 	$ $GOPATH/bin/mig file -path /etc -name "^passwd$" -content "^root"
 	1 agents will be targeted. ctrl+c to cancel. launching in 5 4 3 2 1 GO
 	Following action ID 4885615083564.status=inflight.

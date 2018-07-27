@@ -13,9 +13,9 @@ tar -xzf /usr/local/${gofile} -C /usr/local/go --strip 1
 
 # Link the mig directory into the $GOPATH
 export GOPATH=/home/vagrant/go
-mkdir -p $GOPATH/src/mig.ninja
+mkdir -p $GOPATH/src/github.com/mozilla
 chown -R vagrant.vagrant $GOPATH
-ln -s /mig $GOPATH/src/mig.ninja/mig
+ln -s /mig $GOPATH/src/github.com/mozilla/mig
 echo "export GOPATH=/home/vagrant/go" >> /home/vagrant/.profile
 echo "PATH=/usr/local/go/bin:\$GOPATH/bin:\$PATH" >> /home/vagrant/.profile
 

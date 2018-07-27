@@ -32,19 +32,19 @@ echo -e "\n---- Checking build environment\n"
 if [[ -z "$GOPATH" && "$MAKEGOPATH" == "true" ]]; then
     echo "GOPATH env variable is not set. setting it to '$HOME/go'"
     export GOPATH="$HOME/go"
-    mkdir -p "$GOPATH/src/mig.ninja/"
+    mkdir -p "$GOPATH/src/github.com/mozilla/"
     savepath=$(pwd)
     cd ..
-    mv "$savepath" "$GOPATH/src/mig.ninja/"
-    cd "$GOPATH/src/mig.ninja/"
+    mv "$savepath" "$GOPATH/src/github.com/mozilla/"
+    cd "$GOPATH/src/github.com/mozilla/"
 elif [[ -z "$GOPATH" && "$MAKEGOPATH" == "false" ]]; then
     echo "GOPATH env variable is not set. either set it, or ask this script to create it using: $ $0 makegopath"
     fail
 fi
-if [[ "$GOPATH/src/mig.ninja/mig" != "$(pwd)" ]]; then
+if [[ "$GOPATH/src/github.com/mozilla/mig" != "$(pwd)" ]]; then
     echo "GOPATH error: This repository needs to be located inside of GOPATH for compilation to work."
     echo "current GOPATH is '$GOPATH'. current dir is '$(pwd)'."
-    echo "You should run 'go get mig.ninja/mig' and work from '$GOPATH/src/mig.ninja/mig'."
+    echo "You should run 'go get github.com/mozilla/mig' and work from '$GOPATH/src/github.com/mozilla/mig'."
     fail
 fi
 

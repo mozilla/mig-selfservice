@@ -111,8 +111,6 @@ Discussion
 Join **#mig** on [irc.mozilla.org](https://wiki.mozilla.org/IRC) (use a web
 client such as [mibbit](https://chat.mibbit.com)).
 
-We also have a [public mailing list at list@mig.ninja](http://list.mig.ninja/listinfo/list).
-
 Documentation
 -------------
 All documentation is available in the 'doc' directory and on http://mig.mozilla.org .
@@ -134,9 +132,9 @@ $ export GOPATH=$HOME/go
 
 $ mkdir $GOPATH
 
-$ go get mig.ninja/mig
+$ go get github.com/mozilla/mig
 
-$ cd $GOPATH/src/mig.ninja/mig
+$ cd $GOPATH/src/github.com/mozilla/mig
 
 $ bash tools/standalone_install.sh
 ```

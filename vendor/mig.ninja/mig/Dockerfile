@@ -11,14 +11,14 @@ RUN apt-get update && \
     groupadd -g 10001 mig && \
     useradd -g 10001 -u 10001 -d /mig -m mig
 
-ADD . /go/src/mig.ninja/mig
+ADD . /go/src/github.com/mozilla/mig
 RUN chown -R mig /go
 
 USER mig
 RUN export GOPATH=/go && \
-    cd /go/src/mig.ninja/mig && \
+    cd /go/src/github.com/mozilla/mig && \
     yes | bash ./tools/standalone_install.sh && \
-    cp /go/src/mig.ninja/mig/tools/standalone_start_all.sh /mig/start.sh && \
+    cp /go/src/github.com/mozilla/mig/tools/standalone_start_all.sh /mig/start.sh && \
     chmod +x /mig/start.sh && \
     sudo service postgresql stop
 

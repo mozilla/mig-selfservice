@@ -28,9 +28,9 @@ script:
     - make
     - sudo make install
     - cd ..
-    - mkdir -p "$GOPATH/src/mig.ninja/"
-    - mv "$OLDPATH" "$GOPATH/src/mig.ninja/"
-    - cd "$GOPATH/src/mig.ninja/mig"
+    - mkdir -p "$GOPATH/src/github.com/mozilla/"
+    - mv "$OLDPATH" "$GOPATH/src/github.com/mozilla/"
+    - cd "$GOPATH/src/github.com/mozilla/mig"
     # the files in conf/ are our default files but we need them to also
     # exist in the package directory so go get works. make sure the package
     # specific files match our defaults in conf/ here.
